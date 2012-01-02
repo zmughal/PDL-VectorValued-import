@@ -1,10 +1,10 @@
 ## -*- Mode: Perl -*-
 ##  + CPerl pukes on '/esg'-modifiers.... bummer
 ##
-## $Id: Dev.pm 1975 2007-04-16 07:59:41Z moocow $
+## $Id: Dev.pm 5770 2011-08-31 22:07:03Z moocow $
 ##
 ## File: PDL::VectorValued::Dev.pm
-## Author: Bryan Jurish <moocow@ling.uni-potsdam.de>
+## Author: Bryan Jurish <moocow@cpan.org>
 ## Description: Vector utilities for PDL: development
 ##======================================================================
 
@@ -319,7 +319,7 @@ perl by Larry Wall.
 
 =head1 AUTHOR
 
-Bryan Jurish E<lt>jurish@ling.uni-potsdam.deE<gt>
+Bryan Jurish E<lt>moocow@cpan.orgE<gt>
 
 PDL by Karl Glazebrook, Tuomas J. Lukka, Christian Soeller, and others.
 

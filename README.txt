@@ -6,7 +6,7 @@ ABSTRACT
 REQUIREMENTS
     *   PDL
 
-        Tested version 2.4.3
+        Tested versions 2.4.3, 2.4.7_001, 2.4.9, 2.4.9_015.
 
 DESCRIPTION
     PDL::VectorValued provides some generalizations of builtin PDL functions
@@ -41,7 +41,7 @@ ACKNOWLEDGEMENTS
         same.
 
 AUTHOR
-    Bryan Jurish <jurish@ling.uni-potsdam.de>
+    Bryan Jurish <moocow@cpan.org>
 
 COPYRIGHT
     *   Code for qsortvec() copyright (C) Tuomas J. Lukka 1997.
@@ -53,7 +53,7 @@ COPYRIGHT
         PDL distribution, the copyright notice should be included in the
         file.
 
-    *   All other parts copyright (c) 2007, Bryan Jurish. All rights
+    *   All other parts copyright (c) 2007 - 2011, Bryan Jurish. All rights
         reserved.
 
         This package is free software, and entirely without warranty. You
