@@ -4,7 +4,7 @@
 #
 package PDL::VectorValued::Utils;
 
-@EXPORT_OK  = qw( PDL::PP rlevec PDL::PP rldvec PDL::PP vsearchvec PDL::PP cmpvec PDL::PP vv_qsortvec PDL::PP vv_qsortveci PDL::PP vv_union PDL::PP vv_intersect PDL::PP vv_setdiff );
+@EXPORT_OK  = qw( PDL::PP rlevec PDL::PP rldvec PDL::PP enumvec PDL::PP vsearchvec PDL::PP cmpvec PDL::PP vv_qsortvec PDL::PP vv_qsortveci PDL::PP vv_union PDL::PP vv_intersect PDL::PP vv_setdiff );
 %EXPORT_TAGS = (Func=>[@EXPORT_OK]);
 
 use PDL::Core;
@@ -13,7 +13,7 @@ use DynaLoader;
 
 
 
-   $PDL::VectorValued::Utils::VERSION = 0.05;
+   $PDL::VectorValued::Utils::VERSION = 0.06;
    @ISA    = ( 'PDL::Exporter','DynaLoader' );
    push @PDL::Core::PP, __PACKAGE__;
    bootstrap PDL::VectorValued::Utils $VERSION;
@@ -154,6 +154,38 @@ sub PDL::rldvec {
 
 
 *rldvec = \&PDL::rldvec;
+
+
+
+
+
+=head2 enumvec
+
+=for sig
+
+  Signature: (v(M,N); int [o]k(N))
+
+Enumerate a list of vectors with locally unique keys.
+
+Given a sorted list of vectors $v, generate a vector $k containing locally unique keys for the elements of $v
+(where an "element" is a vector of length $M ocurring in $v).
+
+
+
+=for bad
+
+enumvec does not process bad values.
+It will set the bad-value flag of all output piddles if the flag is set for any of the input piddles.
+
+
+=cut
+
+
+
+
+
+
+*enumvec = \&PDL::enumvec;
 
 
 

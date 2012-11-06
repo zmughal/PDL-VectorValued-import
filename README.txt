@@ -53,7 +53,7 @@ COPYRIGHT
         PDL distribution, the copyright notice should be included in the
         file.
 
-    *   All other parts copyright (c) 2007 - 2011, Bryan Jurish. All rights
+    *   All other parts copyright (c) 2007-2011, Bryan Jurish. All rights
         reserved.
 
         This package is free software, and entirely without warranty. You
