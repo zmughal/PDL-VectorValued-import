@@ -16,4 +16,5 @@ t/00_basic.t
 t/01_rlevec.t
 t/02_cmpvec.t
 t/03_setops.t
+t/04_types.t
 META.yml                                 Module meta-data (added by MakeMaker)
