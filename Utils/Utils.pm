@@ -13,7 +13,7 @@ use DynaLoader;
 
 
 
-   $PDL::VectorValued::Utils::VERSION = 0.07.001;
+   $PDL::VectorValued::Utils::VERSION = 0.07002;
    @ISA    = ( 'PDL::Exporter','DynaLoader' );
    push @PDL::Core::PP, __PACKAGE__;
    bootstrap PDL::VectorValued::Utils $VERSION;
@@ -70,7 +70,7 @@ PDL::VectorValued::Utils - Low-level utilities for vector-valued PDLs
 
 =for sig
 
-  Signature: (c(M,N); indx [o]a(N); [o]b(M,N))
+  Signature: (c(M,N); int [o]a(N); [o]b(M,N))
 
 Run-length encode a set of vectors.
 
@@ -302,6 +302,7 @@ See PDL::Ufunc::qsortvec.
 
 =for bad
 
+
 Vectors with bad components should be moved to the end of the array.
 
 
@@ -322,7 +323,7 @@ Vectors with bad components should be moved to the end of the array.
 
 =for sig
 
-  Signature: (a(n,m); indx [o]ix(m))
+  Signature: (a(n,m); int [o]ix(m))
 
 
 =for ref
@@ -331,6 +332,7 @@ Get lexicographic sort order of a matrix $a() viewed as a list of vectors.
 
 
 =for bad
+
 
 Vectors with bad components should be treated as last in  the lexicographic order.
 
