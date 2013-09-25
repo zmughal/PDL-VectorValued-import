@@ -1,4 +1,4 @@
-## $Id: VectorValued.pm 6820 2013-09-24 11:15:50Z moocow $
+## $Id: VectorValued.pm 6833 2013-09-25 07:06:17Z moocow $
 ##
 ## File: PDL::VectorValued.pm
 ## Author: Bryan Jurish <moocow@cpan.org>
@@ -27,6 +27,7 @@ our %EXPORT_TAGS =
    Func => [@EXPORT_OK],               ##-- respect PDL conventions (hopefully)
   );
 
+#our ($VERSION);			       ##-- set by PDL::VectorValued::Version
 
 ##======================================================================
 ## pod: header
