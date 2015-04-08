@@ -4,7 +4,7 @@
 #
 package PDL::VectorValued::Utils;
 
-@EXPORT_OK  = qw( PDL::PP rlevec PDL::PP rldvec PDL::PP enumvec PDL::PP vsearchvec PDL::PP cmpvec PDL::PP vv_qsortvec PDL::PP vv_qsortveci PDL::PP vv_union PDL::PP vv_intersect PDL::PP vv_setdiff );
+@EXPORT_OK  = qw( PDL::PP rlevec PDL::PP rldvec PDL::PP enumvec PDL::PP vsearchvec PDL::PP cmpvec PDL::PP vv_qsortvec PDL::PP vv_qsortveci PDL::PP vv_union PDL::PP vv_intersect PDL::PP vv_setdiff PDL::PP v_union PDL::PP v_intersect PDL::PP v_setdiff );
 %EXPORT_TAGS = (Func=>[@EXPORT_OK]);
 
 use PDL::Core;
@@ -13,7 +13,7 @@ use DynaLoader;
 
 
 
-   $PDL::VectorValued::Utils::VERSION = 0.08003;
+   $PDL::VectorValued::Utils::VERSION = 0.09001;
    @ISA    = ( 'PDL::Exporter','DynaLoader' );
    push @PDL::Core::PP, __PACKAGE__;
    bootstrap PDL::VectorValued::Utils $VERSION;
@@ -511,6 +511,164 @@ It will set the bad-value flag of all output piddles if the flag is set for any 
 
 
 
+=pod
+
+=head1 Sorted Vector Set Operations
+
+The following functions are provided for set operations on
+flat sorted PDLs with unique values.  They may be more efficient to compute
+than the corresponding implenentations via PDL::Primitive::setops().
+
+=cut
+
+
+
+
+
+=head2 v_union
+
+=for sig
+
+  Signature: (a(NA); b(NB); [o]c(NC); int [o]nc())
+
+
+Union of two flat sorted unique-valued PDLs.
+Input PDLs $a() and $b() B<MUST> be sorted in lexicographic order and contain no duplicates.
+On return, $nc() holds the actual number of values in the union.
+
+In scalar context, reshapes $c() to the actual number of elements in the union and returns it.
+
+
+
+=for bad
+
+v_union does not process bad values.
+It will set the bad-value flag of all output piddles if the flag is set for any of the input piddles.
+
+
+=cut
+
+
+
+
+
+ sub PDL::v_union {
+   my ($a,$b,$c,$nc) = @_;
+   barf("PDL::VectorValued::v_union(): only 1d vectors are supported") if ($a->ndims > 1 || $b->ndims > 1);
+   $nc = PDL->pdl(PDL::long(), $a->dim(0) + $b->dim(0)) if (!defined($nc));
+   if (!defined($c)) {
+     my $ctype = $a->type > $b->type ? $a->type : $b->type;
+     $c = PDL->zeroes($ctype, ref($nc) ? $nc->sclr : $nc);
+   }
+   &PDL::_v_union_int($a,$b,$c,$nc);
+   return ($c,$nc) if (wantarray);
+   return $c->reshape($nc->sclr);
+ }
+
+
+*v_union = \&PDL::v_union;
+
+
+
+
+
+=head2 v_intersect
+
+=for sig
+
+  Signature: (a(NA); b(NB); [o]c(NC); int [o]nc())
+
+
+Intersection of two flat sorted unique-valued PDLs.
+Input PDLs $a() and $b() B<MUST> be sorted in lexicographic order and contain no duplicates.
+On return, $nc() holds the actual number of values in the intersection.
+
+In scalar context, reshapes $c() to the actual number of elements in the intersection and returns it.
+
+
+
+=for bad
+
+v_intersect does not process bad values.
+It will set the bad-value flag of all output piddles if the flag is set for any of the input piddles.
+
+
+=cut
+
+
+
+
+
+ sub PDL::v_intersect {
+   my ($a,$b,$c,$nc) = @_;
+   barf("PDL::VectorValued::v_intersect(): only 1d vectors are supported") if ($a->ndims > 1 || $b->ndims > 1);
+   my $NA = $a->dim(0);
+   my $NB = $b->dim(0);
+   $nc = PDL->pdl(PDL::long(), $NA < $NB ? $NA : $NB) if (!defined($nc));
+   if (!defined($c)) {
+     my $ctype = $a->type > $b->type ? $a->type : $b->type;
+     $c = PDL->zeroes($ctype, ref($nc) ? $nc->sclr : $nc);
+   }
+   &PDL::_v_intersect_int($a,$b,$c,$nc);
+   return ($c,$nc) if (wantarray);
+   return $c->reshape($nc->sclr);
+ }
+
+
+*v_intersect = \&PDL::v_intersect;
+
+
+
+
+
+=head2 v_setdiff
+
+=for sig
+
+  Signature: (a(NA); b(NB); [o]c(NC); int [o]nc())
+
+
+Set-difference ($a() \ $b()) of two flat sorted unique-valued PDLs.
+Input PDLs $a() and $b() B<MUST> be sorted in lexicographic order and contain no duplicate values.
+On return, $nc() holds the actual number of values in the computed vector set.
+
+In scalar context, reshapes $c() to the actual number of elements in the difference set and returns it.
+
+
+
+=for bad
+
+v_setdiff does not process bad values.
+It will set the bad-value flag of all output piddles if the flag is set for any of the input piddles.
+
+
+=cut
+
+
+
+
+
+ sub PDL::v_setdiff {
+   my ($a,$b,$c,$nc) = @_;
+   barf("PDL::VectorValued::v_setdiff(): only 1d vectors are supported") if ($a->ndims > 1 || $b->ndims > 1);
+   my $NA = $a->dim(0);
+   my $NB = $b->dim(0);
+   $nc    = PDL->pdl(PDL::long(), $NA) if (!defined($nc));
+   if (!defined($c)) {
+     my $ctype = $a->type > $b->type ? $a->type : $b->type;
+     $c = PDL->zeroes($ctype, $NA);
+   }
+   &PDL::_v_setdiff_int($a,$b,$c,$nc);
+   return ($c,$nc) if (wantarray);
+   return $c->reshape($nc->sclr);
+ }
+
+
+*v_setdiff = \&PDL::v_setdiff;
+
+
+
+
 ##---------------------------------------------------------------------
 =pod
 
@@ -577,7 +735,7 @@ the file.
 
 =item *
 
-All other parts copyright (c) 2007, Bryan Jurish.  All rights reserved.
+All other parts copyright (c) 2007-2015, Bryan Jurish.  All rights reserved.
 
 This package is free software, and entirely without warranty.
 You may redistribute it and/or modify it under the same terms
