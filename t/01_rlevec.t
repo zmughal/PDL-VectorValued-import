@@ -10,7 +10,8 @@ do "$TEST_DIR/common.plt";
 use PDL;
 use PDL::VectorValued;
 
-BEGIN { plan tests=>11, todo=>[]; }
+BEGIN { plan tests=>16, todo=>[]; }
+my ($tmp);
 
 ##--------------------------------------------------------------
 ## rlevec(), rldvec(): 2d ONLY
@@ -55,7 +56,7 @@ our $p_nd = $pnd1->mv(-1,0)->append($pnd2->mv(-1,0))->append($pnd3->mv(-1,0))->m
 
 our $pf_expect_nd = pdl(long,[3,2,1,1,0,0,0]);
 our $pv_expect_nd = zeroes($p_nd->type, $p_nd->dims);
-$pv_expect_nd->slice(",,0:3") .= $p_nd->dice_axis(-1,[0,3,5,6]);
+($tmp=$pv_expect_nd->slice(",,0:3")) .= $p_nd->dice_axis(-1,[0,3,5,6]);
 
 ## 8..9: test rleND(): Nd
 ($pf_nd,$pv_nd) = rleND($p_nd);
@@ -71,6 +72,23 @@ isok("rldND():Nd", all($pd_nd==$p_nd));
 our $v_nd = $p_nd->clump(2);
 our $k_nd = $v_nd->enumvec();
 isok("enumvec():Nd", all($k_nd==pdl([0,1,2,0,1,0,0])));
+
+##--------------------------------------------------------------
+## 12..16: test rldseq(), rleseq()
+my $lens = pdl(long,[qw(3 0 1 4 2)]);
+my $offs = (($lens->xvals+1)*100)->short;
+my $seqs = null->short;
+$seqs  = $seqs->append(sequence($_)) foreach ($lens->list);
+$seqs += $lens->rld($offs);
+
+my $seqs_got = $lens->rldseq($offs);
+isok("rldseq():type", $seqs_got->type==$seqs->type);
+isok("rldseq():data", all($seqs_got==$seqs));
+
+my ($len_got,$off_got) = $seqs->rleseq();
+isok("rleseq():type", $off_got->type==$seqs->type);
+isok("rleseq():lens",  all($len_got->where($len_got)==$lens->where($lens)));
+isok("rleseq():offs",  all($off_got->where($len_got)==$offs->where($lens)));
 
 print "\n";
 # end of t/01_rlevec.t

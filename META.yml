@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               PDL-VectorValued
-version:            0.09002
+version:            1.0.0
 abstract:           Assorted utilities for vector-valued PDLs
 author:
     - Bryan Jurish

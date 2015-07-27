@@ -4,7 +4,7 @@
 #
 package PDL::VectorValued::Utils;
 
-@EXPORT_OK  = qw( PDL::PP rlevec PDL::PP rldvec PDL::PP enumvec PDL::PP vsearchvec PDL::PP cmpvec PDL::PP vv_qsortvec PDL::PP vv_qsortveci PDL::PP vv_union PDL::PP vv_intersect PDL::PP vv_setdiff PDL::PP v_union PDL::PP v_intersect PDL::PP v_setdiff );
+@EXPORT_OK  = qw( PDL::PP rlevec PDL::PP rldvec PDL::PP enumvec PDL::PP rleseq PDL::PP rldseq PDL::PP vsearchvec PDL::PP cmpvec PDL::PP vv_qsortvec PDL::PP vv_qsortveci PDL::PP vv_union PDL::PP vv_intersect PDL::PP vv_setdiff PDL::PP v_union PDL::PP v_intersect PDL::PP v_setdiff );
 %EXPORT_TAGS = (Func=>[@EXPORT_OK]);
 
 use PDL::Core;
@@ -13,7 +13,7 @@ use DynaLoader;
 
 
 
-   $PDL::VectorValued::Utils::VERSION = 0.09002;
+   $PDL::VectorValued::Utils::VERSION = 1.0.0;
    @ISA    = ( 'PDL::Exporter','DynaLoader' );
    push @PDL::Core::PP, __PACKAGE__;
    bootstrap PDL::VectorValued::Utils $VERSION;
@@ -137,10 +137,8 @@ It will set the bad-value flag of all output piddles if the flag is set for any 
 
 
 sub PDL::rldvec {
-  my ($a,$b) = @_; 
-  my ($c);
-  if ($#_==2) { $c=$_[2]; }
-  else {
+  my ($a,$b,$c) = @_;
+  if (!defined($c)) {
 # XXX Need to improve emulation of threading in auto-generating c
     my ($rowlen) = $b->dim(0);
     my ($size) = $a->sumover->max;
@@ -186,6 +184,92 @@ It will set the bad-value flag of all output piddles if the flag is set for any 
 
 
 *enumvec = \&PDL::enumvec;
+
+
+
+
+
+=head2 rleseq
+
+=for sig
+
+  Signature: (c(N); indx [o]a(N); [o]b(N))
+
+Run-length encode a vector of subsequences.
+
+Given a vector of $c() of concatenated variable-length, variable-offset subsequences,
+generate a vector $a containing the length of each subsequence
+and a vector $b containg the subsequence offsets.
+As for rle(), only the elements up to the first instance of 0 in $a should be considered.
+
+See also PDL::Slices::rle.
+
+
+
+=for bad
+
+rleseq does not process bad values.
+It will set the bad-value flag of all output piddles if the flag is set for any of the input piddles.
+
+
+=cut
+
+
+
+
+
+
+*rleseq = \&PDL::rleseq;
+
+
+
+
+
+=head2 rldseq
+
+=for sig
+
+  Signature: (int a(N); b(N); [o]c(M))
+
+Run-length decode a subsequence vector.
+
+Given a vector $a() of sequence lengths
+and a vector $b() of corresponding offsets,
+decode concatenation of subsequences to $c(),
+as for:
+
+ $c = null;
+ $c = $c->append($b($_)+sequence($a->type,$a($_))) foreach (0..($N-1));
+
+See also: PDL::Slices::rld.
+
+
+
+=for bad
+
+rldseq does not process bad values.
+It will set the bad-value flag of all output piddles if the flag is set for any of the input piddles.
+
+
+=cut
+
+
+
+
+sub PDL::rldseq {
+  my ($a,$b,$c) = @_;
+  if (!defined($c)) {
+    my $size   = $a->sumover->max;
+    my (@dims) = $a->dims;
+    shift(@dims);
+    $c = $b->zeroes($b->type,$size,@dims);
+  }
+  &PDL::_rldseq_int($a,$b,$c);
+  return $c;
+}
+
+
+*rldseq = \&PDL::rldseq;
 
 
 

@@ -1,3 +1,7 @@
+v1.0.0 Mon, 27 Jul 2015 10:06:35 +0200 moocow
+	* explicit 3-component versioning for more transparent version.pm compatiblity
+	* added rleseq(), rldseq() for run-length encoding subsequence vectors
+
 v0.09002 Thu, 09 Apr 2015 10:31:50 +0200 moocow
 	* tweaked bootstrap logic snafu with PDL::VectorValued::Dev including PDL::VectorValued::Version
 	  even though ::Dev is needed at module build time when ::Version is not yet present
