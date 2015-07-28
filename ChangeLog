@@ -1,3 +1,6 @@
+v1.0.1 Tue, 28 Jul 2015 16:51:18 +0200 moocow
+	* added enumvecg(): global vector id-enumerator
+
 v1.0.0 Mon, 27 Jul 2015 10:06:35 +0200 moocow
 	* explicit 3-component versioning for more transparent version.pm compatiblity
 	* added rleseq(), rldseq() for run-length encoding subsequence vectors

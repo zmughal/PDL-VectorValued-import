@@ -10,7 +10,7 @@ do "$TEST_DIR/common.plt";
 use PDL;
 use PDL::VectorValued;
 
-BEGIN { plan tests=>16, todo=>[]; }
+BEGIN { plan tests=>17, todo=>[]; }
 my ($tmp);
 
 ##--------------------------------------------------------------
@@ -34,15 +34,20 @@ isok("rldvec()", all($pd==$p));
 $pk = enumvec($p);
 isok("enumvec()", all($pk==pdl([0,1,2,0,1,0])));
 
+## 5..5: test enumvecg
+$pk = enumvecg($p);
+isok("enumvecg()", all($pk==pdl([0,0,0,1,1,2])));
+
+
 ##--------------------------------------------------------------
 ## rleND, rldND: 2d
 
-## 5..6: test rleND(): 2d
+## 6..7: test rleND(): 2d
 ($pf,$pv) = rleND($p);
 isok("rleND():2d:counts", all($pf==$pf_expect));
 isok("rleND():2d:elts",   all($pv==$pv_expect));
 
-## 7..7: test rldND(): 2d
+## 8..8: test rldND(): 2d
 $pd = rldND($pf,$pv);
 isok("rldND():2d", all($pd==$p));
 
@@ -58,23 +63,23 @@ our $pf_expect_nd = pdl(long,[3,2,1,1,0,0,0]);
 our $pv_expect_nd = zeroes($p_nd->type, $p_nd->dims);
 ($tmp=$pv_expect_nd->slice(",,0:3")) .= $p_nd->dice_axis(-1,[0,3,5,6]);
 
-## 8..9: test rleND(): Nd
+## 9..10: test rleND(): Nd
 ($pf_nd,$pv_nd) = rleND($p_nd);
 isok("rleND():Nd:counts", all($pf_nd==$pf_expect_nd));
 isok("rleND():Nd:elts",   all($pv_nd==$pv_expect_nd));
 
-## 10..10: test rldND(): Nd
+## 11..11: test rldND(): Nd
 $pd_nd = rldND($pf_nd,$pv_nd);
 isok("rldND():Nd", all($pd_nd==$p_nd));
 
 ##--------------------------------------------------------------
-## 11..11: test enumvec(): nd
+## 12..12: test enumvec(): nd
 our $v_nd = $p_nd->clump(2);
 our $k_nd = $v_nd->enumvec();
 isok("enumvec():Nd", all($k_nd==pdl([0,1,2,0,1,0,0])));
 
 ##--------------------------------------------------------------
-## 12..16: test rldseq(), rleseq()
+## 13..17: test rldseq(), rleseq()
 my $lens = pdl(long,[qw(3 0 1 4 2)]);
 my $offs = (($lens->xvals+1)*100)->short;
 my $seqs = null->short;

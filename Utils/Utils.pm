@@ -4,7 +4,7 @@
 #
 package PDL::VectorValued::Utils;
 
-@EXPORT_OK  = qw( PDL::PP rlevec PDL::PP rldvec PDL::PP enumvec PDL::PP rleseq PDL::PP rldseq PDL::PP vsearchvec PDL::PP cmpvec PDL::PP vv_qsortvec PDL::PP vv_qsortveci PDL::PP vv_union PDL::PP vv_intersect PDL::PP vv_setdiff PDL::PP v_union PDL::PP v_intersect PDL::PP v_setdiff );
+@EXPORT_OK  = qw( PDL::PP rlevec PDL::PP rldvec PDL::PP enumvec PDL::PP enumvecg PDL::PP rleseq PDL::PP rldseq PDL::PP vsearchvec PDL::PP cmpvec PDL::PP vv_qsortvec PDL::PP vv_qsortveci PDL::PP vv_union PDL::PP vv_intersect PDL::PP vv_setdiff PDL::PP v_union PDL::PP v_intersect PDL::PP v_setdiff );
 %EXPORT_TAGS = (Func=>[@EXPORT_OK]);
 
 use PDL::Core;
@@ -13,7 +13,7 @@ use DynaLoader;
 
 
 
-   $PDL::VectorValued::Utils::VERSION = 1.0.0;
+   $PDL::VectorValued::Utils::VERSION = 1.0.1;
    @ISA    = ( 'PDL::Exporter','DynaLoader' );
    push @PDL::Core::PP, __PACKAGE__;
    bootstrap PDL::VectorValued::Utils $VERSION;
@@ -168,6 +168,10 @@ Enumerate a list of vectors with locally unique keys.
 Given a sorted list of vectors $v, generate a vector $k containing locally unique keys for the elements of $v
 (where an "element" is a vector of length $M ocurring in $v).
 
+Note that the keys returned in $k are only unique over a run of a single vector in $v,
+so that each unique vector in $v has at least one 0 (zero) index in $k associated with it.
+If you need global keys, see enumvecg().
+
 
 
 =for bad
@@ -184,6 +188,43 @@ It will set the bad-value flag of all output piddles if the flag is set for any 
 
 
 *enumvec = \&PDL::enumvec;
+
+
+
+
+
+=head2 enumvecg
+
+=for sig
+
+  Signature: (v(M,N); int [o]k(N))
+
+Enumerate a list of vectors with globally unique keys.
+
+Given a sorted list of vectors $v, generate a vector $k containing globally unique keys for the elements of $v
+(where an "element" is a vector of length $M ocurring in $v).
+Basically does the same thing as:
+
+ $k = $v->vsearchvec($v->uniqvec);
+
+... but somewhat more efficiently.
+
+
+
+=for bad
+
+enumvecg does not process bad values.
+It will set the bad-value flag of all output piddles if the flag is set for any of the input piddles.
+
+
+=cut
+
+
+
+
+
+
+*enumvecg = \&PDL::enumvecg;
 
 
 
