@@ -205,17 +205,17 @@ EOD
 pp_def('enumvecg',
        Pars => 'v(M,N); int [o]k(N)',
        Code =><<'EOC',
-  int vn, kn, sn=$SIZE(N), matches, ki=0;
-  for (vn=0; vn<sn; vn=kn, ++ki) {
-     for (kn=vn, matches=1; matches && vn<sn; ) {
-       $k(N=>kn) = ki++;
-       ++kn;
+  int vn, vnprev, sn=$SIZE(N), ki;
+  if (sn > 0) {
+    $k(N=>0) = ki = 0;
+    for (vnprev=0, vn=1; vn<sn; vnprev=vn++) {
        loop (M) %{
-         if ($v(N=>vn) != $v(N=>kn)) {
-           matches=0;
+         if ($v(N=>vnprev) != $v(N=>vn)) {
+           ++ki;
            break;
          }
        %}
+       $k(N=>vn) = ki;
      }
    }
 EOC
