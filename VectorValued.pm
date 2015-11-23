@@ -1,4 +1,4 @@
-## $Id: VectorValued.pm 6833 2013-09-25 07:06:17Z moocow $
+## $Id: VectorValued.pm 7998 2015-11-23 11:15:37Z moocow $
 ##
 ## File: PDL::VectorValued.pm
 ## Author: Bryan Jurish <moocow@cpan.org>
@@ -12,7 +12,6 @@ use strict;
 ## Export hacks
 use PDL;
 use PDL::Exporter;
-use PDL::VectorValued::Version; ##-- sets $PDL::VectorValued::VERSION
 use PDL::VectorValued::Utils;
 our @ISA = qw(PDL::Exporter);
 our @EXPORT_OK =
@@ -27,7 +26,8 @@ our %EXPORT_TAGS =
    Func => [@EXPORT_OK],               ##-- respect PDL conventions (hopefully)
   );
 
-#our ($VERSION);			       ##-- set by PDL::VectorValued::Version
+## VERSION was formerly set by PDL::VectorValued::Version, now use perl-reversion from Perl::Version instead
+our $VERSION = '1.0.4';
 
 ##======================================================================
 ## pod: header

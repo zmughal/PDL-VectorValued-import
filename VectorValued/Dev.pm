@@ -1,7 +1,7 @@
 ## -*- Mode: CPerl -*-
 ##  + CPerl pukes on '/esg'-modifiers.... bummer
 ##
-## $Id: Dev.pm 7568 2015-04-09 08:33:23Z moocow $
+## $Id: Dev.pm 7998 2015-11-23 11:15:37Z moocow $
 ##
 ## File: PDL::VectorValued::Dev.pm
 ## Author: Bryan Jurish <moocow@cpan.org>
@@ -16,15 +16,7 @@ use strict;
 #use PDL::PP; ##-- do NOT do this!
 use Exporter;
 
-##-- hack: we can't just 'use PDL::VectorValued::Version;' because PDL::VectorValued::utils.pd needs to include this package
-BEGIN {
-  if (!defined($PDL::VectorValued::VERSION)) {
-    require 'PDL/VectorValued/Version.pm';
-    print STDERR __PACKAGE__, ": got PDL::VectorValued::Version from ", $INC{"PDL/VectorValued/Version.pm"}, "\n";
-  }
-}
-#our ($VERSION); ##-- set by PDL::VectorValued::Version
-
+our $VERSION = '1.0.4'; ##-- v1.0.4: use perl-reversion from Perl::Version instead
 our @ISA = qw(Exporter);
 our @EXPORT_OK =
   (
