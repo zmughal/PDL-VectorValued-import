@@ -4,7 +4,7 @@
 #
 package PDL::VectorValued::Utils;
 
-@EXPORT_OK  = qw( PDL::PP rlevec PDL::PP rldvec PDL::PP enumvec PDL::PP enumvecg PDL::PP rleseq PDL::PP rldseq PDL::PP vsearchvec PDL::PP cmpvec PDL::PP vv_qsortvec PDL::PP vv_qsortveci PDL::PP vv_union PDL::PP vv_intersect PDL::PP vv_setdiff PDL::PP v_union PDL::PP v_intersect PDL::PP v_setdiff );
+@EXPORT_OK  = qw( PDL::PP rlevec PDL::PP rldvec PDL::PP enumvec PDL::PP enumvecg PDL::PP rleseq PDL::PP rldseq PDL::PP vsearchvec PDL::PP cmpvec PDL::PP vv_qsortvec PDL::PP vv_qsortveci PDL::PP vv_union PDL::PP vv_intersect PDL::PP vv_setdiff PDL::PP v_union PDL::PP v_intersect PDL::PP v_setdiff PDL::PP vv_vcos );
 %EXPORT_TAGS = (Func=>[@EXPORT_OK]);
 
 use PDL::Core;
@@ -13,7 +13,7 @@ use DynaLoader;
 
 
 
-   $PDL::VectorValued::Utils::VERSION = 1.0.4;
+   $PDL::VectorValued::Utils::VERSION = 1.0.5;
    @ISA    = ( 'PDL::Exporter','DynaLoader' );
    push @PDL::Core::PP, __PACKAGE__;
    bootstrap PDL::VectorValued::Utils $VERSION;
@@ -790,6 +790,57 @@ It will set the bad-value flag of all output piddles if the flag is set for any 
 
 
 *v_setdiff = \&PDL::v_setdiff;
+
+
+
+
+=pod
+
+=head1 Miscellaneous Vector-Valued Operations
+
+=cut
+
+
+
+
+
+=head2 vv_vcos
+
+=for sig
+
+  Signature: (a(M,N);b(M);float+ [o]vcos(N))
+
+
+Computes the vector cosine similarity of a dense vector $b() with respect to each row $a(*,i)
+of a dense PDL $a().  This is basically the same thing as:
+
+ ($a * $b)->sumover / ($a->pow(2)->sumover->sqrt * $b->pow(2)->sumover->sqrt)
+
+... but should be must faster to compute, and avoids allocating potentially large temporaries for
+the vector magnitudes.  Output values in $vcos() are cosine similarities in the range [-1,1],
+except for zero-magnitude vectors which will result in NaN values in $vcos().
+
+You can use PDL threading to batch-compute distances for multiple $b() vectors simultaneously:
+
+  $bx   = random($M, $NB);   ##-- get $NB random vectors of size $N
+  $vcos = vv_vcos($a,$bx);   ##-- $vcos(i,j) ~ sim($a(,i),$b(,j))
+
+
+
+=for bad
+
+vv_vcos() will set the bad status flag on the output piddle $vcos() if it is set on either of the input
+piddles $a() or $b(), but BAD values will otherwise be ignored for computing the cosine similary.
+
+
+=cut
+
+
+
+
+
+
+*vv_vcos = \&PDL::vv_vcos;
 
 
 
