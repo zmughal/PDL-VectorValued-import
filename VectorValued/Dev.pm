@@ -1,7 +1,7 @@
 ## -*- Mode: CPerl -*-
 ##  + CPerl pukes on '/esg'-modifiers.... bummer
 ##
-## $Id: Dev.pm 8070 2015-12-17 09:09:27Z moocow $
+## $Id: Dev.pm 8340 2016-06-06 09:31:59Z moocow $
 ##
 ## File: PDL::VectorValued::Dev.pm
 ## Author: Bryan Jurish <moocow@cpan.org>
@@ -16,7 +16,7 @@ use strict;
 #use PDL::PP; ##-- do NOT do this!
 use Exporter;
 
-our $VERSION = '1.0.5'; ##-- v1.0.4: use perl-reversion from Perl::Version instead
+our $VERSION = '1.0.6'; ##-- v1.0.4: use perl-reversion from Perl::Version instead
 our @ISA = qw(Exporter);
 our @EXPORT_OK =
   (
