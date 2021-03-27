@@ -86,12 +86,20 @@ Wrapper for pp_def() which calls vvpp_expand() on 'Code' and 'BadCode'
 values in %args.
 
 =cut
-
+our @_REAL_TYPES =
+	  map { $_->{ppsym} }
+	  # Older PDLs:
+	  # - no native complex types, did not have real key
+	  # Newer PDLs:
+	  # - native complex types, have real key
+	  grep { ! exists $_->{real} || $_->{real} }
+	  @PDL::Types::typehash{PDL::Types::typesrtkeys()};
 sub vvpp_def {
   my ($name,%args) = @_;
   foreach (qw(Code BadCode)) {
     $args{$_} = vvpp_expand($args{$_}) if (defined($args{$_}));
   }
+  $args{GenericTypes} = \@_REAL_TYPES unless exists $args{GenericTypes};
   PDL::PP::pp_def($name,%args);
 }
 
